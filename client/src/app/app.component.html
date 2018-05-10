@@ -1,5 +1,34 @@
-<div style="text-align:center">
-    <div *ngFor="let message of messages">{{message}}</div>
-    <input [(ngModel)]="currentMessage">
-    <button (click)="sendMessage()">Submit</button>
-</div>
+<mat-sidenav-container hasBackdrop="true" [autosize]="true" class="container-fluid">
+  <mat-sidenav #sidenav mode="side" [fixedInViewport]="true">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let room of rooms" class="row">
+        <mat-card-actions>{{room}}</mat-card-actions>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row class="row">
+      <div class="col-sm-3">
+        <button mat-raised-button (click)="sidenav.toggle()">Rooms</button>
+      </div>
+      <div class="col-sm-9">
+        <h1>Slack 2: Electric Boogaloo</h1>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div class="row" style="margin-bottom: 5%">
+    <mat-list>
+      <mat-list-item *ngFor="let message of messages">{{message}}</mat-list-item>
+    </mat-list>
+  </div>
+  <div class="row fixed-row-bottom" style="background-color: lightgrey">
+    <mat-form-field style="width: 95%">
+          <textarea matInput matTextareaAutosize [matAutosizeMinRows]="1" [matAutosizeMaxRows]="5"
+                    placeholder="Enter text here" [(ngModel)]="currentMessage" (keypress)="enterPressed($event)">
+
+          </textarea>
+    </mat-form-field>
+
+    <button mat-raised-button (click)="sendMessage()" style="margin-left: 5px;width: 4%;">Send</button>
+  </div>
+</mat-sidenav-container>

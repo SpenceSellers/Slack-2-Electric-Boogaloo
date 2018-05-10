@@ -1,15 +1,25 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    public currentMessage: string;
-    public messages: string[] = [];
+  public currentMessage: string;
+  public messages: string[] = [];
+  public rooms: string[] = ['fake room 1', 'fake room 2', 'fake room 3'];
 
-    public sendMessage(): void {
-        this.messages.push(this.currentMessage);
+  enterPressed(event: KeyboardEvent) {
+    if (!event.shiftKey && event.keyCode === 13) {
+      this.sendMessage();
+      event.preventDefault();
     }
+  }
+
+  public sendMessage(): void {
+    this.messages.push(this.currentMessage);
+    this.currentMessage = '';
+    window.scrollTo(0, document.body.scrollHeight);
+  }
 }
