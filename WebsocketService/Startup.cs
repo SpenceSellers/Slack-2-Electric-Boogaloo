@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace WebsocketService
         {
             services.AddMvc();
         }
+
+        private List<WebSocket> websockets = new List<WebSocket>();
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -46,6 +49,7 @@ namespace WebsocketService
                         if (context.WebSockets.IsWebSocketRequest)
                         {
                             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                            websockets.Add(webSocket);
                             await Echo(context, webSocket);
                         }
                         else
