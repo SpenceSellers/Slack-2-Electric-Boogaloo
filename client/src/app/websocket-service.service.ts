@@ -1,28 +1,27 @@
 import { Injectable } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable()
-export class WebsocketServiceService {
+export class WebsocketService {
     private socket: WebSocket;
+    private subject: Subject<string> = new Subject();
 
     constructor() {
         this.socket = new WebSocket('wss://slack2.azurewebsites.net/ws');
 
-        // Connection opened
         this.socket.addEventListener('open', event => {
-            this.socket.send('Hello Server!');
         });
 
-        // Listen for messages
         this.socket.addEventListener('message', event => {
-            console.log('Message from server ', event.data);
+            this.subject.next(event.data);
         });
     }
 
     sendMessage(message: string) {
-
+        this.socket.send(message);
     }
 
-    // getMessages(): Observable<string> {
-
-    // }
+    getMessages(): Observable<string> {
+        return this.subject;
+    }
 }

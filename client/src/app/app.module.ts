@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 
 import {AppComponent} from './app.component';
-import {WebsocketServiceService} from './websocket-service.service';
+import {WebsocketService} from './websocket-service.service';
 import {MatButtonModule, MatCardModule, MatInputModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -22,7 +22,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     BrowserModule,
     FormsModule
   ],
-  providers: [WebsocketServiceService],
+  providers: [WebsocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

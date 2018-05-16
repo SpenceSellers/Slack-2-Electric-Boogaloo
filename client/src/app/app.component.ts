@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import { WebsocketService } from './websocket-service.service';
 
 @Component({
   selector: 'app-root',
@@ -6,20 +7,29 @@ import {Component} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public currentMessage: string;
-  public messages: string[] = [];
-  public rooms: string[] = ['fake room 1', 'fake room 2', 'fake room 3'];
-
-  enterPressed(event: KeyboardEvent) {
-    if (!event.shiftKey && event.keyCode === 13) {
-      this.sendMessage();
-      event.preventDefault();
+    constructor(private _websocketService: WebsocketService) {
+        this._websocketService.getMessages().subscribe(message => {
+            this.getMessage(message);
+        });
     }
-  }
+    public currentMessage: string;
+    public messages: string[] = [];
+    public rooms: string[] = ['fake room 1', 'fake room 2', 'fake room 3'];
 
-  public sendMessage(): void {
-    this.messages.push(this.currentMessage);
-    this.currentMessage = '';
-    window.scrollTo(0, document.body.scrollHeight);
-  }
+    enterPressed(event: KeyboardEvent) {
+        if (!event.shiftKey && event.keyCode === 13) {
+            this.sendMessage();
+            event.preventDefault();
+        }
+    }
+
+    public getMessage(message: string): void {
+        this.messages.push(message);
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    public sendMessage(): void {
+        this._websocketService.sendMessage(this.currentMessage);
+        this.currentMessage = '';
+    }
 }
