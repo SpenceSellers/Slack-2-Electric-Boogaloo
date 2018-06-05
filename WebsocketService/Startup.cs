@@ -26,7 +26,7 @@ namespace WebsocketService
             services.AddMvc();
         }
 
-        private List<WebSocket> websockets = new List<WebSocket>();
+        private readonly List<WebSocket> _websockets = new List<WebSocket>();
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -49,8 +49,10 @@ namespace WebsocketService
                         if (context.WebSockets.IsWebSocketRequest)
                         {
                             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                            websockets.Add(webSocket);
+                            _websockets.Add(webSocket);
                             await Echo(context, webSocket);
+                            // We're done, remove this from the list.
+                            _websockets.Remove(webSocket);
                         }
                         else
                         {
@@ -71,7 +73,10 @@ namespace WebsocketService
             WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             while (!result.CloseStatus.HasValue)
             {
-                await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
+                foreach (var ws in _websockets)
+                {
+                    await ws.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
+                }
 
                 result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             }
