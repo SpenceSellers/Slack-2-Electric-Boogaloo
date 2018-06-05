@@ -15,6 +15,7 @@ export class AppComponent {
     public currentMessage: string;
     public messages: string[] = [];
     public rooms: string[] = ['fake room 1', 'fake room 2', 'fake room 3'];
+    public name: string | undefined;
 
     enterPressed(event: KeyboardEvent) {
         if (!event.shiftKey && event.keyCode === 13) {
@@ -29,7 +30,14 @@ export class AppComponent {
     }
 
     public sendMessage(): void {
-        this._websocketService.sendMessage(this.currentMessage);
+        if (!this.name) {
+            this.assignRandomName();
+        }
+        this._websocketService.sendMessage(this.name + ': ' + this.currentMessage);
         this.currentMessage = '';
+    }
+
+    private assignRandomName(): void {
+        this.name = 'User ' + Math.floor(Math.random() * 1000);
     }
 }

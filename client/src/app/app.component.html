@@ -6,19 +6,26 @@
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
+
   <mat-toolbar color="primary">
     <mat-toolbar-row class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         <button mat-raised-button (click)="sidenav.toggle()">Rooms</button>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-4">
         <h1>Slack 2: Electric Boogaloo</h1>
+      </div>
+      <div class="col-sm-4">
+        <mat-form-field>
+            <input matInput placeholder="Your name" [(ngModel)]="name">
+        </mat-form-field>
       </div>
     </mat-toolbar-row>
   </mat-toolbar>
-  <div class="row" style="margin-bottom: 5%">
+
+  <div class="row" style="margin-bottom: 5%; width:80%">
     <mat-list>
-      <mat-list-item *ngFor="let message of messages">{{message}}</mat-list-item>
+      <mat-list-item class="message" *ngFor="let message of messages">{{message}}</mat-list-item>
     </mat-list>
   </div>
   <div class="row fixed-row-bottom" style="background-color: lightgrey">
